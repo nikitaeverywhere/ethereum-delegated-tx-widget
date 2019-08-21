@@ -2,6 +2,27 @@
   "name": "ethereum-delegated-tx-widget",
   "version": "0.1.0",
   "private": true,
+  "author": "ZitRo",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZitRos/ethereum-delegated-tx-widget.git"
+  },
+  "homepage" : "https://zitros.github.io/ethereum-delegated-tx-widget",
+  "bugs": {
+    "url": "https://github.com/ZitRos/ethereum-delegated-tx-widget/issues"
+  },
+  "keywords": [
+    "Ethereum",
+    "delegated",
+    "transactions",
+    "pay",
+    "fee",
+    "in",
+    "tokens",
+    "instead",
+    "of",
+    "ether"
+  ],
   "dependencies": {
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
@@ -9,11 +30,13 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && rm -rf docs && mv build docs",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint src",
-    "lint-fix": "eslint src --fix"
+    "lint-fix": "eslint src --fix",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -35,6 +58,7 @@
     "eslint-config-prettier": "^6.1.0",
     "eslint-config-react": "^1.1.7",
     "eslint-plugin-prettier": "^3.1.0",
+    "gh-pages": "^2.1.1",
     "prettier": "^1.18.2"
   }
 }

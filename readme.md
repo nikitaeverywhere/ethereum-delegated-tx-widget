@@ -66,8 +66,8 @@ npm install
 npm run start
 ```
 
-To build the project, run
+To build and deploy the project to GitHub (access is restricted), run
 
 ```bash
-npm run build
+npm run deploy
 ```
