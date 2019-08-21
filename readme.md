@@ -2,7 +2,7 @@
 
 Embeddable widget which performs Ethereum delegated transactions with particular setup. Also, it works as a stand-alone page.
 
-[**---> CHECK IT OUT HERE! <---**](https://http://zitros.github.io/ethereum-delegated-tx-widget/)
+[**---> CHECK IT OUT HERE! <---**](https://zitros.github.io/ethereum-delegated-tx-widget/)
 
 Embedding
 ---------
@@ -10,7 +10,7 @@ Embedding
 (...in progress...)
 
 ```html
-<iframe src="https://http://zitros.github.io/ethereum-delegated-tx-widget/?contractAddress=0x82f4ded9cec9b5750fbff5c2185aee35afc16587&otherParams=abc"
+<iframe src="https://zitros.github.io/ethereum-delegated-tx-widget/?contractAddress=0x82f4ded9cec9b5750fbff5c2185aee35afc16587&otherParams=abc"
         frameborder="0">
 </iframe>
 ```
