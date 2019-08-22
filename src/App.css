@@ -7,7 +7,7 @@ input {
   width: 116px;
   font-size: var(--font-size-medium);
   font-family: inherit;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   text-align: center;
   outline: none;
 }
@@ -19,7 +19,7 @@ button {
   background-color: #63c84a;
   font-size: var(--font-size-medium);
   font-family: inherit;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   color: white;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   text-align: center;
@@ -38,6 +38,10 @@ button.unavailable {
 
 button:hover:not(.unavailable) {
   transform: perspective(100px) translateZ(2px);
+}
+
+a {
+  color: inherit;
 }
 
 .app {
