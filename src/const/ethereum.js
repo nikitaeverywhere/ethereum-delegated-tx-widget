@@ -1,3 +1,8 @@
+export const UNKNOWN_NETWORK = Object.freeze({
+  chainId: -1,
+  name: 'unknown-network'
+});
+
 export const NETWORK_BY_CHAIN_ID = {
   1: {
     chainId: 1,

@@ -20,38 +20,38 @@ Embedding
 <table>
 <tr>
   <th>URL Parameter</th>
-  <th>Required</th>
+  <th>Default</th>
   <th>Example</th>
   <th>Description</th>
 </tr>
 <tr>
-  <td><code>networkName</code></td>
-  <td></td>
+  <td><code>network</code></td>
   <td><code>mainnet</code></td>
-  <td>Required network name</td>
+  <td><code>1</code></td>
+  <td>Required network name or network id (resolved automatically)</td>
 </tr>
 <tr>
   <td><code>contractAddress</code></td>
-  <td>✔</td>
+  <td><a href="https://etherscan.io/token/0x82f4ded9cec9b5750fbff5c2185aee35afc16587">0x82f4ded..fc16587</a></td>
   <td><code>0x1234..cdef</code></td>
   <td>Smart contract address (usually token address) to perform delegated transaction</td>
 </tr>
 <tr>
   <td><code>functionName</code></td>
-  <td>✔</td>
+  <td><code>transfer</code></td>
   <td><code>transfer</code></td>
   <td>Smart contract function name which supports delegated requests</td>
 </tr>
 <tr>
   <td><code>functionArguments</code></td>
-  <td></td>
+  <td><code>[]</code></td>
   <td><code>["0x1aa4..cdaf",20000000]</code></td>
   <td>Arguments of the function as an array (in this example, <code>transfer("0x1aa4..cdaf", 20000000)</code>)</td>
 </tr>
 <tr>
   <td><code>backEndUrl</code></td>
-  <td></td>
-  <td><code>https://my-website.com/delegated-tx</code></td>
+  <td><code>['http://localhost:8088']</code></td>
+  <td><code>https://my-website.com/delegated-txs/api</code></td>
   <td>Public custom delegated transactions back end (see <a target="_blank" href="https://github.com/ZitRos/ethereum-delegated-tx-service">ethereum-delegated-tx-service</a>). Otherwise, pre-defined back end is used.</td>
 </tr>
 </table>

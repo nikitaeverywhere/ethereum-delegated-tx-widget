@@ -1,35 +1,27 @@
 import React from 'react';
-import { action } from 'mobx';
+import { action, runInAction } from 'mobx';
 import { observer } from 'mobx-react';
 import './App.css';
-import state, { unknownNetwork } from './state';
+import { state } from './state';
 import TransferArrow from './components/TransferArrow';
 import TokenLogo from './components/TokenLogo';
 import WarningIcon from './components/WarningIcon';
 import { formatEthereumAddress } from './utils';
-import { NETWORK_BY_CHAIN_ID } from './const';
-import { getWeb3Provider, getProvider } from './modules/ethereum';
+import {
+  NETWORK_BY_CHAIN_ID,
+  UNKNOWN_NETWORK,
+  WARNING_NO_WEB3,
+  WARNING_UNKNOWN_NETWORK,
+  WARNING_WRONG_NETWORK,
+  WARNING_CUSTOM_MESSAGE,
+  WARNING_UNABLE_TO_CONNECT_WEB3
+} from './const';
+import { getWeb3Provider, wrapEthersProvider } from './modules/ethereum';
 
 class App extends React.PureComponent {
   state = {
-    warningMessage: (
-      <span>
-        In order to use this delegated transactions service, you need to browse
-        this page with{' '}
-        <a target="_blank" rel="noopener noreferrer" href="https://metamask.io">
-          Metamask wallet
-        </a>{' '}
-        extension or from your{' '}
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://trustwallet.com"
-        >
-          mobile wallet&apos;s
-        </a>{' '}
-        embedded DApp browser (if supported).
-      </span>
-    )
+    warningMessage: WARNING_NO_WEB3,
+    networkWarningMessage: null
   };
 
   accountUpdateTimeout = 1;
@@ -44,28 +36,36 @@ class App extends React.PureComponent {
     let network;
     // this.provider.getNetwork() always returns the same net, looks like a bug in Ethers.js. Using the native method
     do {
+      // eslint-disable-next-line require-atomic-updates
       network = await new Promise((res, rej) =>
         this.web3Provider.version.getNetwork((e, r) => (e ? rej(e) : res(r)))
       );
       if (!NETWORK_BY_CHAIN_ID[network]) {
         this.setState({
-          warningMessage: (
-            <span>
-              Unknown network selected in your wallet. Please, switch to main
-              network or known testnets (ropsten/kovan)
-            </span>
-          )
+          networkWarningMessage: WARNING_UNKNOWN_NETWORK(network)
         });
         await new Promise(r => setTimeout(r, 5000));
       }
     } while (!NETWORK_BY_CHAIN_ID[network]);
 
-    if (state.currentAccount !== account) {
-      state.currentAccount = account;
-    }
-    if (+network !== state.currentNetwork.chainId) {
-      state.currentNetwork = NETWORK_BY_CHAIN_ID[network] || unknownNetwork;
-    }
+    runInAction(() => {
+      if (state.currentAccount !== account) {
+        state.currentAccount = account;
+      }
+      if (+network !== state.selectedNetwork.chainId) {
+        state.selectedNetwork = NETWORK_BY_CHAIN_ID[network] || UNKNOWN_NETWORK;
+      }
+    });
+
+    this.setState({
+      networkWarningMessage:
+        state.selectedNetwork.chainId !== state.targetNetwork.chainId
+          ? WARNING_WRONG_NETWORK(
+              state.targetNetwork.name,
+              state.selectedNetwork.name
+            )
+          : null
+    });
 
     if (this.accountUpdateTimeout > 0) {
       this.accountUpdateTimeout = setTimeout(this.updateFromProvider, 100); // Loop
@@ -76,14 +76,14 @@ class App extends React.PureComponent {
     try {
       this.web3Provider = await getWeb3Provider(message =>
         this.setState({
-          warningMessage: <span>{message}</span>
+          warningMessage: WARNING_CUSTOM_MESSAGE(message)
         })
       );
       if (!this.web3Provider) {
         // Show default warning message
         return;
       }
-      this.provider = await getProvider(this.web3Provider);
+      this.provider = await wrapEthersProvider(this.web3Provider);
       await this.updateFromProvider();
       this.setState({
         warningMessage: null
@@ -91,9 +91,7 @@ class App extends React.PureComponent {
       console.log('Provider', this.provider);
     } catch (e) {
       this.setState({
-        warningMessage: (
-          <span>Unable to connect to your wallet. {e.toString()}</span>
-        )
+        warningMessage: WARNING_UNABLE_TO_CONNECT_WEB3(e.toString())
       });
     }
   }
@@ -105,18 +103,29 @@ class App extends React.PureComponent {
 
   render() {
     const sender = formatEthereumAddress(state.currentAccount);
+    const { contractAddress, contractSymbolReadOnly } = state;
     const recipient = formatEthereumAddress(
       '0x6f8103606b649522aF9687e8f1e7399eff8c4a6B'
     );
     const value = 5;
     const fee = 2.1516;
+    let { warningMessage, networkWarningMessage } = this.state;
+    let warning =
+      warningMessage || networkWarningMessage || state.globalWarningMessage;
+
+    // Parse backEndsMeta and determine:
+    // - contract
+    // - network
+    // - etc
+
     return (
       <div className="app">
         <section className="app-body">
           <h1 className="head-title">Transfer</h1>
           {/* <div className="head-subtitle">Delegated token transaction</div> */}
           <div className="token-info">
-            {value} <TokenLogo /> DREAM
+            {value} <TokenLogo tokenAddress={contractAddress} />{' '}
+            {contractSymbolReadOnly}
           </div>
           <div className="sender-and-recipient-block">
             <div>
@@ -137,7 +146,8 @@ class App extends React.PureComponent {
             <div className="spec-table-row">
               <div>Fee for Sender</div>
               <div className="strong">
-                {fee} <TokenLogo /> DREAM
+                {fee} <TokenLogo tokenAddress={contractAddress} />{' '}
+                {contractSymbolReadOnly}
               </div>
             </div>
             <div className="spec-table-row">
@@ -145,15 +155,13 @@ class App extends React.PureComponent {
               <div>~3 minutes</div>
             </div>
           </div>
-          {this.state.warningMessage && (
+          {warning && (
             <div className="warning-message">
-              <WarningIcon /> {this.state.warningMessage}
+              <WarningIcon /> {warning}
             </div>
           )}
           <div className="center">
-            <button className={this.state.warningMessage ? 'unavailable' : ''}>
-              Confirm
-            </button>
+            <button className={warning ? 'unavailable' : ''}>Confirm</button>
           </div>
         </section>
       </div>
@@ -162,38 +170,3 @@ class App extends React.PureComponent {
 }
 
 export default observer(App);
-
-// function App() {
-
-//   const [currentAccount, setCurrentAccount] = useState("");
-//   const [warningMessage, setWarningMessage] = useState();
-//   const [currentNetwork, setCurrentNetwork] = useState(unknownNetwork);
-
-//   const updateFromProvider = useCallback(async () => {
-//     if (!provider) {
-//       return;
-//     }
-//     const account = (await provider.listAccounts())[0];
-//     if (currentAccount != account) {
-//       setCurrentAccount(account);
-//     }
-//     let network;
-//     // this.provider.getNetwork() always returns the same net, looks like a bug in Ethers.js. Using the native method
-//     do {
-//       network = await new Promise((res, rej) => web3Provider.version.getNetwork((e, r) => e ? rej(e) : res(r)));
-//       if (!ethNetworksByChainId[network]) {
-//         setWarningMessage(<span>
-//           Unknown network selected in your wallet. Please, switch to main network or known testnets (ropsten/kovan)
-//         </span>);
-//         await new Promise(r => setTimeout(r, 3000));
-//       }
-//     } while (!ethNetworksByChainId[network]);
-//     if (+network != currentNetwork.chainId) {
-//       setCurrentNetwork(ethNetworksByChainId[network] || unknownNetwork);
-//     }
-//   }, [currentAccount, currentNetwork]);
-
-//     accountUpdateTimeout = 0;
-// }
-
-// export default App;

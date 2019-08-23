@@ -1,0 +1,1 @@
+export const INFURA_PUBLIC_API_KEY = '26330e580e9d49ffb91482c15a92e86a';

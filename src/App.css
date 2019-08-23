@@ -52,7 +52,7 @@ a {
   background-color: #282c34;
   font-size: 19px;
   color: white;
-  animation: fadeIn .2s linear;
+  animation: fadeIn .5s linear;
 }
 
 .app-body {
@@ -136,5 +136,6 @@ a {
 
 @keyframes fadeIn {
   0% {opacity: 0;}
+  50% {opacity: 0.1;}
   100% {opacity: 1;}
 }

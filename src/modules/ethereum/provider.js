@@ -1,6 +1,6 @@
 import { providers } from 'ethers';
 
-export async function getProvider(
+export async function wrapEthersProvider(
   web3Provider = null,
   reportStatus = () => {}
 ) {
