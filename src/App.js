@@ -14,7 +14,9 @@ import {
   WARNING_UNKNOWN_NETWORK,
   WARNING_WRONG_NETWORK,
   WARNING_CUSTOM_MESSAGE,
-  WARNING_UNABLE_TO_CONNECT_WEB3
+  WARNING_UNABLE_TO_CONNECT_WEB3,
+  WARNING_CONTRACT_NOT_SUPPORTED,
+  WARNING_SUPPORTED_CONTRACT_WRONG_NETWORK
 } from './const';
 import { getWeb3Provider, wrapEthersProvider } from './modules/ethereum';
 
@@ -59,7 +61,13 @@ class App extends React.PureComponent {
 
     this.setState({
       networkWarningMessage:
-        state.selectedNetwork.chainId !== state.targetNetwork.chainId
+        state.selectedNetwork.chainId !== state.targetNetwork.chainId &&
+        !(
+          state.backEndsByContractReadOnly[state.contractAddress] &&
+          state.backEndsByContractReadOnly[state.contractAddress].find(
+            b => b.networkChainId === state.selectedNetwork.chainId
+          )
+        )
           ? WARNING_WRONG_NETWORK(
               state.targetNetwork.name,
               state.selectedNetwork.name
@@ -103,7 +111,12 @@ class App extends React.PureComponent {
 
   render() {
     const sender = formatEthereumAddress(state.currentAccount);
-    const { contractAddress, contractSymbolReadOnly } = state;
+    const {
+      contractAddress,
+      contractSymbolReadOnly,
+      backEndsByContractReadOnly,
+      selectedNetwork
+    } = state;
     const recipient = formatEthereumAddress(
       '0x6f8103606b649522aF9687e8f1e7399eff8c4a6B'
     );
@@ -113,6 +126,26 @@ class App extends React.PureComponent {
     let warning =
       warningMessage || networkWarningMessage || state.globalWarningMessage;
 
+    if (!backEndsByContractReadOnly[contractAddress]) {
+      warning = warning || WARNING_CONTRACT_NOT_SUPPORTED(contractAddress);
+    } else if (
+      !backEndsByContractReadOnly[contractAddress].find(
+        b => b.networkChainId === selectedNetwork.chainId
+      )
+    ) {
+      warning =
+        warning ||
+        WARNING_SUPPORTED_CONTRACT_WRONG_NETWORK(
+          selectedNetwork.name,
+          Array.from(
+            new Set(
+              backEndsByContractReadOnly[contractAddress].map(
+                c => c.networkName
+              )
+            )
+          )
+        );
+    }
     // Parse backEndsMeta and determine:
     // - contract
     // - network

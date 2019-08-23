@@ -55,9 +55,27 @@ action(async () => {
   const backEndsReady = [];
   const addBackEnds = () => {
     runInAction(() => {
-      let backEnd;
-      while ((backEnd = backEndsReady.pop())) {
+      let backEnd, url;
+      while (([backEnd, url] = backEndsReady.pop() || []) && backEnd) {
         state.backEndsMeta.push(backEnd);
+        if (!backEnd.contracts || !(backEnd.contracts instanceof Array)) {
+          console.warn(
+            `Back end endpoint GET ${url} does not provide contracts[]`
+          );
+        }
+        for (const contractBackEnd of backEnd.contracts || []) {
+          state.backEndsByContractReadOnly = {
+            ...state.backEndsByContractReadOnly,
+            [contractBackEnd.address]: (
+              state.backEndsByContractReadOnly[contractBackEnd.address] || []
+            ).concat({
+              ...contractBackEnd,
+              url,
+              networkChainId: backEnd.networkChainId,
+              networkName: backEnd.networkName
+            })
+          };
+        }
       }
     });
   };
@@ -66,7 +84,7 @@ action(async () => {
     DELEGATED_TX_BACK_ENDS.map(async url => {
       try {
         const meta = await httpGet(url);
-        backEndsReady.push(meta);
+        backEndsReady.push([meta, url]);
       } catch (e) {
         console.error(`Back end ${url} responds with error.`, e);
       }
