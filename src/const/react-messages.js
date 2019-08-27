@@ -81,3 +81,15 @@ export const WARNING_SUPPORTED_CONTRACT_WRONG_NETWORK = (
     network).
   </span>
 );
+
+export const WARNING_BACK_END_ERROR = (url, res) => (
+  <span>
+    Delegated back end {url} error: {res}
+  </span>
+);
+
+export const WARNING_BACK_END_INVALID_RESPONSE = (url, res) => (
+  <span>
+    Delegated back end {url} invalid response: {res}
+  </span>
+);

@@ -6,7 +6,12 @@ import { state } from './state';
 import TransferArrow from './components/TransferArrow';
 import TokenLogo from './components/TokenLogo';
 import WarningIcon from './components/WarningIcon';
-import { formatEthereumAddress } from './utils';
+import Button from './components/Button';
+import {
+  formatEthereumAddress,
+  formatTokenValue,
+  getBackEndContracts
+} from './utils';
 import {
   NETWORK_BY_CHAIN_ID,
   UNKNOWN_NETWORK,
@@ -18,52 +23,20 @@ import {
 import { getWeb3Provider, wrapEthersProvider } from './modules/ethereum';
 
 const getContractNetworks = () =>
-  (state.backEndsByContractReadOnly[state.contractAddress] &&
-    state.backEndsByContractReadOnly[state.contractAddress].length &&
-    state.backEndsByContractReadOnly[state.contractAddress]
-      .filter(b => b.networkChainId === state.selectedNetwork.chainId)
-      .map(b => NETWORK_BY_CHAIN_ID[b.networkChainId])) ||
-  [];
+  getBackEndContracts(state).map(b => NETWORK_BY_CHAIN_ID[b.networkChainId]);
 const isCurrentNetworkTarget = () =>
   state.selectedNetwork.chainId === state.targetNetwork.chainId;
 
 class App extends React.PureComponent {
-  // state = {
-  //   warningMessage: WARNING_NO_WEB3,
-  //   networkWarningMessage: null
-  // };
-
   accountUpdateTimeout = 1;
-  provider = null;
   web3Provider = null;
 
-  // getWarningMessage = () =>
-  //   this.state.warningMessage ||
-  //   this.state.networkWarningMessage ||
-  //   state.globalWarningMessage ||
-  //   (!state.backEndsByContractReadOnly[state.contractAddress] &&
-  //     WARNING_CONTRACT_NOT_SUPPORTED(state.contractAddress)) ||
-  //   (!state.backEndsByContractReadOnly[state.contractAddress].find(
-  //     b => b.networkChainId === state.selectedNetwork.chainId
-  //   ) && // Nado eshe podymat'
-  //     WARNING_SUPPORTED_CONTRACT_WRONG_NETWORK(
-  //       state.selectedNetwork.name,
-  //       Array.from(
-  //         new Set(
-  //           state.backEndsByContractReadOnly[state.contractAddress].map(
-  //             c => c.networkName
-  //           )
-  //         )
-  //       )
-  //     )) ||
-  //   null;
-
   updateFromProvider = action(async () => {
-    if (!this.provider) {
+    if (!state.ethersProvider) {
       // Displays default initWarningMessage
       return;
     }
-    const account = (await this.provider.listAccounts())[0];
+    const account = (await state.ethersProvider.listAccounts())[0];
     let network;
     // this.provider.getNetwork() always returns the same net, looks like a bug in Ethers.js. Using the native method
     do {
@@ -81,8 +54,8 @@ class App extends React.PureComponent {
 
     runInAction(() => {
       // Update account
-      if (state.currentAccount !== account) {
-        state.currentAccount = account;
+      if (state.currentEthereumAccount !== account) {
+        state.currentEthereumAccount = account;
       }
 
       // Update selected network
@@ -130,10 +103,13 @@ class App extends React.PureComponent {
         // Show default initWarningMessage
         return;
       }
-      this.provider = await wrapEthersProvider(this.web3Provider);
+      let provider = await wrapEthersProvider(this.web3Provider);
+      runInAction(() => {
+        state.initWarningMessage = null;
+        state.ethersProvider = provider;
+      });
       await this.updateFromProvider();
-      runInAction(() => (state.initWarningMessage = null));
-      console.log('Provider', this.provider);
+      console.log('Provider', provider);
     } catch (e) {
       runInAction(
         () =>
@@ -151,27 +127,40 @@ class App extends React.PureComponent {
   }
 
   actionButtonClick = async () => {
-    if (state.warningMessageReadOnly) {
+    if (!state.approvedDelegationRequest) {
       return;
     }
     // todo
   };
 
   render() {
-    const sender = formatEthereumAddress(state.currentAccount);
-    const { contractAddress, contractSymbolReadOnly } = state;
+    const sender = formatEthereumAddress(state.currentEthereumAccount);
+    const {
+      contractAddress,
+      contractSymbolReadOnly,
+      functionArguments,
+      contractDecimalsReadOnly,
+      approvedDelegationRequest
+    } = state;
     const recipient = formatEthereumAddress(
-      '0x6f8103606b649522aF9687e8f1e7399eff8c4a6B'
+      (functionArguments && functionArguments.length && functionArguments[0]) ||
+        '0x6f8103606b649522aF9687e8f1e7399eff8c4a6B'
     );
-    const value = 5;
-    const fee = 2.1516;
+    const value = formatTokenValue(
+      (functionArguments && functionArguments.length && functionArguments[1]) ||
+        Math.pow(10, contractDecimalsReadOnly).toString(),
+      contractDecimalsReadOnly
+    );
+    const fee = formatTokenValue(
+      (approvedDelegationRequest && approvedDelegationRequest.fee) || 0,
+      contractDecimalsReadOnly
+    );
     let warning = state.warningMessageReadOnly;
 
     return (
       <div className="app">
         <section className="app-body">
           <h1 className="head-title">Transfer</h1>
-          {/* <div className="head-subtitle">Delegated token transaction</div> */}
           <div className="token-info">
             {value} <TokenLogo tokenAddress={contractAddress} />{' '}
             {contractSymbolReadOnly}
@@ -210,12 +199,15 @@ class App extends React.PureComponent {
             </div>
           )}
           <div className="center">
-            <button
-              className={warning ? 'unavailable' : ''}
+            <Button
+              className={
+                warning || !state.approvedDelegationRequest ? 'unavailable' : ''
+              }
+              loading={!warning && !state.approvedDelegationRequest}
               onClick={this.actionButtonClick}
             >
               Confirm
-            </button>
+            </Button>
           </div>
         </section>
       </div>
