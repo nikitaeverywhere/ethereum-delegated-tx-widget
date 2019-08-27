@@ -10,60 +10,57 @@ import { formatEthereumAddress } from './utils';
 import {
   NETWORK_BY_CHAIN_ID,
   UNKNOWN_NETWORK,
-  WARNING_NO_WEB3,
   WARNING_UNKNOWN_NETWORK,
   WARNING_WRONG_NETWORK,
   WARNING_CUSTOM_MESSAGE,
-  WARNING_UNABLE_TO_CONNECT_WEB3,
-  WARNING_CONTRACT_NOT_SUPPORTED,
-  WARNING_SUPPORTED_CONTRACT_WRONG_NETWORK
+  WARNING_UNABLE_TO_CONNECT_WEB3
 } from './const';
 import { getWeb3Provider, wrapEthersProvider } from './modules/ethereum';
 
 const getContractNetworks = () =>
-  state.backEndsByContractReadOnly[state.contractAddress] &&
-  state.backEndsByContractReadOnly[state.contractAddress]
-    .filter(b => b.networkChainId === state.selectedNetwork.chainId)
-    .map(b => NETWORK_BY_CHAIN_ID[b.networkChainId]);
+  (state.backEndsByContractReadOnly[state.contractAddress] &&
+    state.backEndsByContractReadOnly[state.contractAddress].length &&
+    state.backEndsByContractReadOnly[state.contractAddress]
+      .filter(b => b.networkChainId === state.selectedNetwork.chainId)
+      .map(b => NETWORK_BY_CHAIN_ID[b.networkChainId])) ||
+  [];
 const isCurrentNetworkTarget = () =>
   state.selectedNetwork.chainId === state.targetNetwork.chainId;
 
 class App extends React.PureComponent {
-  state = {
-    warningMessage: WARNING_NO_WEB3,
-    networkWarningMessage: null
-  };
+  // state = {
+  //   warningMessage: WARNING_NO_WEB3,
+  //   networkWarningMessage: null
+  // };
 
   accountUpdateTimeout = 1;
   provider = null;
   web3Provider = null;
 
-  getWarningMessage = () =>
-    this.state.warningMessage ||
-    this.state.networkWarningMessage ||
-    state.globalWarningMessage ||
-    (!state.backEndsByContractReadOnly[state.contractAddress] &&
-      WARNING_CONTRACT_NOT_SUPPORTED(state.contractAddress)) ||
-    (!state.backEndsByContractReadOnly[state.contractAddress].find(
-      b => b.networkChainId === state.selectedNetwork.chainId
-    ) && // Nado eshe podymat'
-      WARNING_SUPPORTED_CONTRACT_WRONG_NETWORK(
-        state.selectedNetwork.name,
-        Array.from(
-          new Set(
-            state.backEndsByContractReadOnly[state.contractAddress].map(
-              c => c.networkName
-            )
-          )
-        )
-      )) ||
-    null;
+  // getWarningMessage = () =>
+  //   this.state.warningMessage ||
+  //   this.state.networkWarningMessage ||
+  //   state.globalWarningMessage ||
+  //   (!state.backEndsByContractReadOnly[state.contractAddress] &&
+  //     WARNING_CONTRACT_NOT_SUPPORTED(state.contractAddress)) ||
+  //   (!state.backEndsByContractReadOnly[state.contractAddress].find(
+  //     b => b.networkChainId === state.selectedNetwork.chainId
+  //   ) && // Nado eshe podymat'
+  //     WARNING_SUPPORTED_CONTRACT_WRONG_NETWORK(
+  //       state.selectedNetwork.name,
+  //       Array.from(
+  //         new Set(
+  //           state.backEndsByContractReadOnly[state.contractAddress].map(
+  //             c => c.networkName
+  //           )
+  //         )
+  //       )
+  //     )) ||
+  //   null;
 
   updateFromProvider = action(async () => {
     if (!this.provider) {
-      this.setState({
-        warningMessage: WARNING_NO_WEB3
-      });
+      // Displays default initWarningMessage
       return;
     }
     const account = (await this.provider.listAccounts())[0];
@@ -75,9 +72,9 @@ class App extends React.PureComponent {
         this.web3Provider.version.getNetwork((e, r) => (e ? rej(e) : res(r)))
       );
       if (!NETWORK_BY_CHAIN_ID[network]) {
-        this.setState({
-          networkWarningMessage: WARNING_UNKNOWN_NETWORK(network)
-        });
+        runInAction(
+          () => (state.networkWarningMessage = WARNING_UNKNOWN_NETWORK(network))
+        );
         await new Promise(r => setTimeout(r, 5000));
       }
     } while (!NETWORK_BY_CHAIN_ID[network]);
@@ -97,18 +94,24 @@ class App extends React.PureComponent {
       const contractsInOtherNetworks = getContractNetworks().filter(
         net => net.chainId !== state.targetNetwork.chainId
       );
-      if (contractsInOtherNetworks.length) {
+      if (
+        contractsInOtherNetworks.length &&
+        state.targetNetwork.chainId !== contractsInOtherNetworks[0].chainId
+      ) {
         state.targetNetwork = contractsInOtherNetworks[0];
       }
-    });
 
-    this.setState({
-      networkWarningMessage: !isCurrentNetworkTarget()
-        ? WARNING_WRONG_NETWORK(
+      // Target network warning
+      if (!isCurrentNetworkTarget()) {
+        if (!state.networkWarningMessage) {
+          state.networkWarningMessage = WARNING_WRONG_NETWORK(
             state.targetNetwork.name,
             state.selectedNetwork.name
-          )
-        : null
+          );
+        }
+      } else {
+        state.networkWarningMessage = null;
+      }
     });
 
     if (this.accountUpdateTimeout > 0) {
@@ -116,29 +119,31 @@ class App extends React.PureComponent {
     }
   });
 
-  async componentDidMount() {
+  componentDidMount = action(async () => {
     try {
       this.web3Provider = await getWeb3Provider(message =>
-        this.setState({
-          warningMessage: WARNING_CUSTOM_MESSAGE(message)
-        })
+        runInAction(
+          () => (state.initWarningMessage = WARNING_CUSTOM_MESSAGE(message))
+        )
       );
       if (!this.web3Provider) {
-        // Show default warning message
+        // Show default initWarningMessage
         return;
       }
       this.provider = await wrapEthersProvider(this.web3Provider);
       await this.updateFromProvider();
-      this.setState({
-        warningMessage: null
-      });
+      runInAction(() => (state.initWarningMessage = null));
       console.log('Provider', this.provider);
     } catch (e) {
-      this.setState({
-        warningMessage: WARNING_UNABLE_TO_CONNECT_WEB3(e.toString())
-      });
+      runInAction(
+        () =>
+          (state.initWarningMessage = WARNING_UNABLE_TO_CONNECT_WEB3(
+            e.toString()
+          ))
+      );
+      console.error(e);
     }
-  }
+  });
 
   componentWillUnmount() {
     clearTimeout(this.accountUpdateTimeout);
@@ -146,10 +151,10 @@ class App extends React.PureComponent {
   }
 
   actionButtonClick = async () => {
-    if (this.getWarningMessage()) {
+    if (state.warningMessageReadOnly) {
       return;
     }
-    //
+    // todo
   };
 
   render() {
@@ -160,7 +165,7 @@ class App extends React.PureComponent {
     );
     const value = 5;
     const fee = 2.1516;
-    let warning = this.getWarningMessage();
+    let warning = state.warningMessageReadOnly;
 
     return (
       <div className="app">

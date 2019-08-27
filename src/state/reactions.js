@@ -8,8 +8,9 @@ const loadTokenMeta = action(async () => {
     state.targetNetwork.name === 'homestead'
       ? 'mainnet'
       : state.targetNetwork.name;
+  let symbol, decimals;
   try {
-    const [symbol, decimals] = await Promise.all([
+    [symbol, decimals] = await Promise.all([
       ethCall(networkName, state.contractAddress, 'symbol()'),
       ethCall(networkName, state.contractAddress, 'decimals()')
     ]);
@@ -24,9 +25,12 @@ const loadTokenMeta = action(async () => {
       state.contractSymbolReadOnly = 'Tokens';
       state.contractDecimalsReadOnly = 18;
     });
-    console.error('Unable to determine token symbol', e);
+    if (symbol !== '0x') {
+      console.info('Unable to determine token symbol', e);
+    } // Otherwise it is not present in the network and it's fine
   }
 });
 
 observe(state, 'contractAddress', loadTokenMeta); // Todo: kovan token meta
 observe(state, 'targetNetwork', loadTokenMeta);
+// observe(state, 'warningMessageReadOnly', () => console.log('Warning message changes'));
