@@ -29,3 +29,4 @@ const loadTokenMeta = action(async () => {
 });
 
 observe(state, 'contractAddress', loadTokenMeta); // Todo: kovan token meta
+observe(state, 'targetNetwork', loadTokenMeta);

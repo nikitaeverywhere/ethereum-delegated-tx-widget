@@ -20,6 +20,14 @@ import {
 } from './const';
 import { getWeb3Provider, wrapEthersProvider } from './modules/ethereum';
 
+const getContractNetworks = () =>
+  state.backEndsByContractReadOnly[state.contractAddress] &&
+  state.backEndsByContractReadOnly[state.contractAddress]
+    .filter(b => b.networkChainId === state.selectedNetwork.chainId)
+    .map(b => NETWORK_BY_CHAIN_ID[b.networkChainId]);
+const isCurrentNetworkTarget = () =>
+  state.selectedNetwork.chainId === state.targetNetwork.chainId;
+
 class App extends React.PureComponent {
   state = {
     warningMessage: WARNING_NO_WEB3,
@@ -51,28 +59,32 @@ class App extends React.PureComponent {
     } while (!NETWORK_BY_CHAIN_ID[network]);
 
     runInAction(() => {
+      // Update account
       if (state.currentAccount !== account) {
         state.currentAccount = account;
       }
+
+      // Update selected network
       if (+network !== state.selectedNetwork.chainId) {
         state.selectedNetwork = NETWORK_BY_CHAIN_ID[network] || UNKNOWN_NETWORK;
+      }
+
+      // Make Target Network a network which has the selected contract.
+      const contractsInOtherNetworks = getContractNetworks().filter(
+        net => net.chainId !== state.targetNetwork.chainId
+      );
+      if (contractsInOtherNetworks.length) {
+        state.targetNetwork = contractsInOtherNetworks[0];
       }
     });
 
     this.setState({
-      networkWarningMessage:
-        state.selectedNetwork.chainId !== state.targetNetwork.chainId &&
-        !(
-          state.backEndsByContractReadOnly[state.contractAddress] &&
-          state.backEndsByContractReadOnly[state.contractAddress].find(
-            b => b.networkChainId === state.selectedNetwork.chainId
+      networkWarningMessage: !isCurrentNetworkTarget()
+        ? WARNING_WRONG_NETWORK(
+            state.targetNetwork.name,
+            state.selectedNetwork.name
           )
-        )
-          ? WARNING_WRONG_NETWORK(
-              state.targetNetwork.name,
-              state.selectedNetwork.name
-            )
-          : null
+        : null
     });
 
     if (this.accountUpdateTimeout > 0) {
