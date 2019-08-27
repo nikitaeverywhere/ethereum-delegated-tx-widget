@@ -38,8 +38,32 @@ class App extends React.PureComponent {
   provider = null;
   web3Provider = null;
 
+  getWarningMessage = () =>
+    this.state.warningMessage ||
+    this.state.networkWarningMessage ||
+    state.globalWarningMessage ||
+    (!state.backEndsByContractReadOnly[state.contractAddress] &&
+      WARNING_CONTRACT_NOT_SUPPORTED(state.contractAddress)) ||
+    (!state.backEndsByContractReadOnly[state.contractAddress].find(
+      b => b.networkChainId === state.selectedNetwork.chainId
+    ) && // Nado eshe podymat'
+      WARNING_SUPPORTED_CONTRACT_WRONG_NETWORK(
+        state.selectedNetwork.name,
+        Array.from(
+          new Set(
+            state.backEndsByContractReadOnly[state.contractAddress].map(
+              c => c.networkName
+            )
+          )
+        )
+      )) ||
+    null;
+
   updateFromProvider = action(async () => {
     if (!this.provider) {
+      this.setState({
+        warningMessage: WARNING_NO_WEB3
+      });
       return;
     }
     const account = (await this.provider.listAccounts())[0];
@@ -121,47 +145,22 @@ class App extends React.PureComponent {
     this.accountUpdateTimeout = 0;
   }
 
+  actionButtonClick = async () => {
+    if (this.getWarningMessage()) {
+      return;
+    }
+    //
+  };
+
   render() {
     const sender = formatEthereumAddress(state.currentAccount);
-    const {
-      contractAddress,
-      contractSymbolReadOnly,
-      backEndsByContractReadOnly,
-      selectedNetwork
-    } = state;
+    const { contractAddress, contractSymbolReadOnly } = state;
     const recipient = formatEthereumAddress(
       '0x6f8103606b649522aF9687e8f1e7399eff8c4a6B'
     );
     const value = 5;
     const fee = 2.1516;
-    let { warningMessage, networkWarningMessage } = this.state;
-    let warning =
-      warningMessage || networkWarningMessage || state.globalWarningMessage;
-
-    if (!backEndsByContractReadOnly[contractAddress]) {
-      warning = warning || WARNING_CONTRACT_NOT_SUPPORTED(contractAddress);
-    } else if (
-      !backEndsByContractReadOnly[contractAddress].find(
-        b => b.networkChainId === selectedNetwork.chainId
-      )
-    ) {
-      warning =
-        warning ||
-        WARNING_SUPPORTED_CONTRACT_WRONG_NETWORK(
-          selectedNetwork.name,
-          Array.from(
-            new Set(
-              backEndsByContractReadOnly[contractAddress].map(
-                c => c.networkName
-              )
-            )
-          )
-        );
-    }
-    // Parse backEndsMeta and determine:
-    // - contract
-    // - network
-    // - etc
+    let warning = this.getWarningMessage();
 
     return (
       <div className="app">
@@ -206,7 +205,12 @@ class App extends React.PureComponent {
             </div>
           )}
           <div className="center">
-            <button className={warning ? 'unavailable' : ''}>Confirm</button>
+            <button
+              className={warning ? 'unavailable' : ''}
+              onClick={this.actionButtonClick}
+            >
+              Confirm
+            </button>
           </div>
         </section>
       </div>
