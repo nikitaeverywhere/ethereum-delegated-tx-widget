@@ -255,7 +255,8 @@ class App extends React.PureComponent {
                 onClick={this.actionButtonClick}
               >
                 {state.approvedDelegationResponse &&
-                (state.approvedDelegationResponse.status === 'mining' ||
+                (state.approvedDelegationResponse.status === 'new' ||
+                  state.approvedDelegationResponse.status === 'mining' ||
                   state.approvedDelegationResponse.status === 'confirmed')
                   ? 'Waiting'
                   : 'Confirm'}

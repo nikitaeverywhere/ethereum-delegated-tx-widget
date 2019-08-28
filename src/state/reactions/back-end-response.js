@@ -4,8 +4,7 @@ import {
   WARNING_CONFIRMATION_BACK_END_ERROR,
   INFO_PLEASE_SIGN,
   INFO_PLEASE_SIGN_AGAIN,
-  INFO_PROCESSING,
-  INFO_WAIT_FOR_TRANSACTION
+  INFO_PROCESSING
 } from '../../const';
 import { httpPost, signData } from '../../utils';
 import state from '../state';
@@ -96,10 +95,6 @@ observe(
       const result = response.result;
       result.meta = state.approvedDelegationRequest.meta;
       state.approvedDelegationResponse = result;
-      state.globalInfoMessage = INFO_WAIT_FOR_TRANSACTION(
-        result.transactionHash,
-        state.selectedNetworkNameReadOnly
-      );
     });
   })
 );

@@ -132,20 +132,24 @@ export const INFO_PROCESSING = <span>Processing, please wait...</span>;
 export const INFO_WAIT_FOR_TRANSACTION = (txHash, network = 'mainnet') => (
   <span>
     Your transaction{' '}
-    <a
-      target="_blank"
-      rel="noopener noreferrer"
-      href={`https://${network}.etherscan.io/tx/${txHash}`}
-    >
-      {formatEthereumAddress(txHash)}
-    </a>{' '}
+    {txHash ? (
+      <span key="span-swan">
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href={`https://${network}.etherscan.io/tx/${txHash}`}
+        >
+          {formatEthereumAddress(txHash)}
+        </a>{' '}
+      </span>
+    ) : null}
     is on its way! Please wait until it is mined, it might take some time.
   </span>
 );
 
 export const INFO_TRANSACTION_MINED = (txHash, network = 'mainnet') => (
   <span>
-    Done! Your transaction is confirmed:{' '}
+    Done! Your transaction is mined:{' '}
     <a
       target="_blank"
       rel="noopener noreferrer"

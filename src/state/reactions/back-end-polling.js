@@ -2,7 +2,8 @@ import { observe, action } from 'mobx';
 import {
   WARNING_BACK_END_INVALID_RESPONSE,
   WARNING_TRANSACTION_FAILED,
-  INFO_TRANSACTION_MINED
+  INFO_TRANSACTION_MINED,
+  INFO_WAIT_FOR_TRANSACTION
 } from '../../const';
 import { httpGet } from '../../utils';
 import state from '../state';
@@ -22,12 +23,16 @@ observe(
         state.selectedNetworkNameReadOnly
       );
       return;
-    }
-    if (state.approvedDelegationResponse.status === 'failed') {
+    } else if (state.approvedDelegationResponse.status === 'failed') {
       state.globalWarningMessage = WARNING_TRANSACTION_FAILED(
         state.approvedDelegationResponse.id
       );
       return;
+    } else {
+      state.globalInfoMessage = INFO_WAIT_FOR_TRANSACTION(
+        state.approvedDelegationResponse.transactionHash,
+        state.selectedNetworkNameReadOnly
+      );
     }
     pollingInterval = setInterval(updateFromBackEnd, 10000);
     // Do not update immediately but after one interval
