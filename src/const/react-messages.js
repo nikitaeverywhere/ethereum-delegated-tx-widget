@@ -152,7 +152,6 @@ export const INFO_TRANSACTION_MINED = (txHash, network = 'mainnet') => (
       href={`https://${network}.etherscan.io/tx/${txHash}`}
     >
       {formatEthereumAddress(txHash)}
-    </a>{' '}
-    is on its way! Please wait until it is mined, it might take some time.
+    </a>
   </span>
 );
