@@ -27,6 +27,10 @@ const getContractNetworks = () =>
   getBackEndContracts(state).map(b => NETWORK_BY_CHAIN_ID[b.networkChainId]);
 const isCurrentNetworkTarget = () =>
   state.selectedNetwork.chainId === state.targetNetwork.chainId;
+const isButtonActive = () =>
+  !state.warningMessageReadOnly &&
+  state.approvedDelegationRequest &&
+  !state.delegationConfirmationRequestPending;
 
 class App extends React.PureComponent {
   state = {
@@ -144,10 +148,7 @@ class App extends React.PureComponent {
   }
 
   actionButtonClick = action(async () => {
-    if (
-      !state.approvedDelegationRequest ||
-      state.delegationConfirmationRequestPending
-    ) {
+    if (!isButtonActive()) {
       return;
     }
     // There is a reaction on changing this prop which enables signing / back end request
@@ -181,10 +182,6 @@ class App extends React.PureComponent {
       !warning &&
       (!state.approvedDelegationRequest ||
         state.delegationConfirmationRequestPending);
-    const isButtonActive =
-      !warning &&
-      state.approvedDelegationRequest &&
-      !state.delegationConfirmationRequestPending;
     const expiresIn = !state.approvedDelegationRequest
       ? ''
       : new Date(
@@ -249,15 +246,22 @@ class App extends React.PureComponent {
               {warning || state.globalInfoMessage}
             </div>
           )}
-          <div className="center">
-            <Button
-              className={(!isButtonActive && 'unavailable') || ''}
-              loading={isLoading}
-              onClick={this.actionButtonClick}
-            >
-              Confirm
-            </Button>
-          </div>
+          {state.approvedDelegationResponse &&
+          state.approvedDelegationResponse.status === 'mined' ? null : (
+            <div className="center">
+              <Button
+                className={(!isButtonActive() && 'unavailable') || ''}
+                loading={isLoading}
+                onClick={this.actionButtonClick}
+              >
+                {state.approvedDelegationResponse &&
+                (state.approvedDelegationResponse.status === 'mining' ||
+                  state.approvedDelegationResponse.status === 'confirmed')
+                  ? 'Waiting'
+                  : 'Confirm'}
+              </Button>
+            </div>
+          )}
         </section>
       </div>
     );

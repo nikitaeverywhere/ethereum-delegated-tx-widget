@@ -11,6 +11,7 @@ const state = observable({
   currentEthereumAccount: '',
   targetNetwork: NETWORK_BY_CHAIN_ID[1], // Default to mainnet
   selectedNetwork: UNKNOWN_NETWORK, // Network currently selected by user
+  selectedNetworkNameReadOnly: UNKNOWN_NETWORK.name,
   ethersProvider: null,
 
   globalInfoMessage: null, // When set, displayed if warnings are empty
@@ -29,7 +30,8 @@ const state = observable({
   backEndsByContractReadOnly: {}, // Map contract => [back end 1, back end 2, ...]. Computed within backEndsMeta
 
   // Best back end response (where the fee is the lowest) + .meta with back end metadata (such as .meta.url)
-  approvedDelegationRequest: null,
+  approvedDelegationRequest: null, // Object - response of /request + .meta property (.meta.url)
+  approvedDelegationResponse: null, // Object - response of /response + .meta property (.meta.url)
   delegationConfirmationRequestPending: false,
 
   // Refer to this property to understand whether there are any warning messages

@@ -57,6 +57,7 @@ a {
 
 .app-body {
   max-width: 360px;
+  word-break: break-word;
 }
 
 .warning-message {

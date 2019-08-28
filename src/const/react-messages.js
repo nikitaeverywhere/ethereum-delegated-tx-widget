@@ -94,6 +94,25 @@ export const WARNING_BACK_END_INVALID_RESPONSE = (url, res) => (
   </span>
 );
 
+export const WARNING_CONFIRMATION_BACK_END_ERROR = (url, message) => (
+  <span>
+    Unable to confirm delegated request. Delegated back end {url} responds with
+    this error: {message}
+    <br />
+    <strong>
+      <u>Check your token balance and reload this page once refilled.</u>
+    </strong>
+  </span>
+);
+
+export const WARNING_TRANSACTION_FAILED = requestId => (
+  <span>
+    Unfortunately, delegated transaction {requestId} has failed. This could
+    happen due to request expiration, network conditions or due to failing
+    delegated back end. However, you can retry.
+  </span>
+);
+
 export const INFO_PLEASE_SIGN = (
   <span>
     Please, confirm the signature in your wallet. If nothing happens, try
@@ -105,5 +124,35 @@ export const INFO_PLEASE_SIGN_AGAIN = signatureStandards => (
   <span>
     For some reason, we were unable to get a signature from you. Please, try
     again. Available signature standards: {signatureStandards.join(', ')}
+  </span>
+);
+
+export const INFO_PROCESSING = <span>Processing, please wait...</span>;
+
+export const INFO_WAIT_FOR_TRANSACTION = (txHash, network = 'mainnet') => (
+  <span>
+    Your transaction{' '}
+    <a
+      target="_blank"
+      rel="noopener noreferrer"
+      href={`https://${network}.etherscan.io/tx/${txHash}`}
+    >
+      {formatEthereumAddress(txHash)}
+    </a>{' '}
+    is on its way! Please wait until it is mined, it might take some time.
+  </span>
+);
+
+export const INFO_TRANSACTION_MINED = (txHash, network = 'mainnet') => (
+  <span>
+    Done! Your transaction is confirmed:{' '}
+    <a
+      target="_blank"
+      rel="noopener noreferrer"
+      href={`https://${network}.etherscan.io/tx/${txHash}`}
+    >
+      {formatEthereumAddress(txHash)}
+    </a>{' '}
+    is on its way! Please wait until it is mined, it might take some time.
   </span>
 );

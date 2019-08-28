@@ -46,6 +46,9 @@ action(() => {
       );
     }
   }
+  if (url.functionArguments) {
+    state.functionArguments = url.functionArguments.split(',');
+  }
 })();
 
 /// Fetch back ends metadata
