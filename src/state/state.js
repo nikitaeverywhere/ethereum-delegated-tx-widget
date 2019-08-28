@@ -29,6 +29,7 @@ const state = observable({
 
   // Best back end response (where the fee is the lowest) + .meta with back end metadata (such as .meta.url)
   approvedDelegationRequest: null,
+  delegationConfirmationRequestPending: false,
 
   // Refer to this property to understand whether there are any warning messages
   get warningMessageReadOnly() {

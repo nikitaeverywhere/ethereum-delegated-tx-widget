@@ -28,8 +28,22 @@ const isCurrentNetworkTarget = () =>
   state.selectedNetwork.chainId === state.targetNetwork.chainId;
 
 class App extends React.PureComponent {
+  state = {
+    tick: 0
+  };
+
   accountUpdateTimeout = 1;
   web3Provider = null;
+  tickerInterval = 0;
+
+  ticker = () => {
+    if (!state.approvedDelegationRequest) {
+      return;
+    }
+    this.setState({
+      tick: this.state.tick + 1
+    });
+  };
 
   updateFromProvider = action(async () => {
     if (!state.ethersProvider) {
@@ -93,6 +107,7 @@ class App extends React.PureComponent {
   });
 
   componentDidMount = action(async () => {
+    this.tickerInterval = setInterval(this.ticker, 1000);
     try {
       this.web3Provider = await getWeb3Provider(message =>
         runInAction(
@@ -123,15 +138,20 @@ class App extends React.PureComponent {
 
   componentWillUnmount() {
     clearTimeout(this.accountUpdateTimeout);
+    clearInterval(this.tickerInterval);
     this.accountUpdateTimeout = 0;
   }
 
-  actionButtonClick = async () => {
-    if (!state.approvedDelegationRequest) {
+  actionButtonClick = action(async () => {
+    if (
+      !state.approvedDelegationRequest ||
+      state.delegationConfirmationRequestPending
+    ) {
       return;
     }
-    // todo
-  };
+    // There is a reaction on changing this prop which enables signing / back end request
+    runInAction(() => (state.delegationConfirmationRequestPending = true));
+  });
 
   render() {
     const sender = formatEthereumAddress(state.currentEthereumAccount);
@@ -156,6 +176,24 @@ class App extends React.PureComponent {
       contractDecimalsReadOnly
     );
     let warning = state.warningMessageReadOnly;
+    const isLoading =
+      !warning &&
+      (!state.approvedDelegationRequest ||
+        state.delegationConfirmationRequestPending);
+    const isButtonActive =
+      !warning &&
+      state.approvedDelegationRequest &&
+      !state.delegationConfirmationRequestPending;
+    const expiresIn = !state.approvedDelegationRequest
+      ? ''
+      : new Date(
+          new Date(state.approvedDelegationRequest.expiresAt).getTime() -
+            Date.now() +
+            new Date().getTimezoneOffset() * 60 * 1000
+        )
+          .toTimeString()
+          .replace(/\s.*$/, '')
+          .replace(/^00:/, '');
 
     return (
       <div className="app">
@@ -188,6 +226,12 @@ class App extends React.PureComponent {
                 {contractSymbolReadOnly}
               </div>
             </div>
+            {!state.approvedDelegationRequest ? null : (
+              <div className="spec-table-row">
+                <div>Fee Expires In</div>
+                <div>{expiresIn}</div>
+              </div>
+            )}
             <div className="spec-table-row">
               <div>Confirmation Time</div>
               <div>~3 minutes</div>
@@ -200,10 +244,8 @@ class App extends React.PureComponent {
           )}
           <div className="center">
             <Button
-              className={
-                warning || !state.approvedDelegationRequest ? 'unavailable' : ''
-              }
-              loading={!warning && !state.approvedDelegationRequest}
+              className={(!isButtonActive && 'unavailable') || ''}
+              loading={isLoading}
               onClick={this.actionButtonClick}
             >
               Confirm
