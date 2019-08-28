@@ -66,6 +66,10 @@ a {
   text-align: center;
 }
 
+.warning-message.info {
+  color: #ffd949;
+}
+
 .center {
   text-align: center;
 }

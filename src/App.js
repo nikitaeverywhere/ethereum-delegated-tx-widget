@@ -6,6 +6,7 @@ import { state } from './state';
 import TransferArrow from './components/TransferArrow';
 import TokenLogo from './components/TokenLogo';
 import WarningIcon from './components/WarningIcon';
+import InfoIcon from './components/InfoIcon';
 import Button from './components/Button';
 import {
   formatEthereumAddress,
@@ -237,9 +238,15 @@ class App extends React.PureComponent {
               <div>~3 minutes</div>
             </div>
           </div>
-          {warning && (
-            <div className="warning-message">
-              <WarningIcon /> {warning}
+          {(warning || state.globalInfoMessage) && (
+            <div
+              className={
+                'warning-message' +
+                (!warning && state.globalInfoMessage ? ' info' : '')
+              }
+            >
+              {warning ? <WarningIcon /> : <InfoIcon />}{' '}
+              {warning || state.globalInfoMessage}
             </div>
           )}
           <div className="center">

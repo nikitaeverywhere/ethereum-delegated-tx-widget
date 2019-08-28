@@ -48,3 +48,24 @@ export async function ethCall(networkName, contractAddress, functionSignature) {
   );
   return response.result;
 }
+
+export async function signData(state, standard, data) {
+  const provider = state.ethersProvider;
+  try {
+    if (standard === 'eth_signTypedData') {
+      const res = await provider.send('eth_signTypedData', [
+        data,
+        state.currentEthereumAccount.toString()
+      ]);
+      return res;
+    } else if (standard === 'eth_personalSign') {
+      const res = await provider.send('eth_sign', [
+        data,
+        state.currentEthereumAccount.toString()
+      ]);
+      return res;
+    }
+  } catch (e) {
+    return '';
+  }
+}

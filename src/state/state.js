@@ -13,6 +13,7 @@ const state = observable({
   selectedNetwork: UNKNOWN_NETWORK, // Network currently selected by user
   ethersProvider: null,
 
+  globalInfoMessage: null, // When set, displayed if warnings are empty
   globalWarningMessage: null, // Displayed on top of all other warnings if set
   initWarningMessage: WARNING_NO_WEB3,
   networkWarningMessage: null,

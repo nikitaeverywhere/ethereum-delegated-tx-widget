@@ -93,3 +93,17 @@ export const WARNING_BACK_END_INVALID_RESPONSE = (url, res) => (
     Delegated back end {url} invalid response: {res}
   </span>
 );
+
+export const INFO_PLEASE_SIGN = (
+  <span>
+    Please, confirm the signature in your wallet. If nothing happens, try
+    re-opening your wallet.
+  </span>
+);
+
+export const INFO_PLEASE_SIGN_AGAIN = signatureStandards => (
+  <span>
+    For some reason, we were unable to get a signature from you. Please, try
+    again. Available signature standards: {signatureStandards.join(', ')}
+  </span>
+);
