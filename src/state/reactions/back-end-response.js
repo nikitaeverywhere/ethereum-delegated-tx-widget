@@ -22,7 +22,8 @@ observe(
     }
 
     // Sign with available signature standards
-    console.log(state.approvedDelegationRequest);
+    const oldFixed = state.fixed;
+    runInAction(() => (state.fixed = true));
     const signatureOptionsPriority = ['eth_signTypedData', 'eth_personalSign'];
     const signOptionsByPriority = toJS(
       state.approvedDelegationRequest.signatureOptions
@@ -71,6 +72,7 @@ observe(
           )
         );
         state.delegationConfirmationRequestPending = false;
+        state.fixed = oldFixed;
       });
       return;
     } else {
@@ -93,9 +95,10 @@ observe(
         state.globalInfoMessage = '';
         state.globalWarningMessage = WARNING_CONFIRMATION_BACK_END_ERROR(
           state.approvedDelegationRequest.meta.url,
-          e
+          e + ''
         );
         state.delegationConfirmationRequestPending = false;
+        state.fixed = oldFixed;
       });
       console.error(e);
       return;

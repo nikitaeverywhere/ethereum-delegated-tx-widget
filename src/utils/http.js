@@ -25,7 +25,7 @@ async function httpRequest(url, method = 'GET', data = undefined) {
         }
       }
     };
-    xhr.onerror = reject;
+    xhr.onerror = () => reject('request failed');
     xhr.send(data && JSON.stringify(data));
   });
 }

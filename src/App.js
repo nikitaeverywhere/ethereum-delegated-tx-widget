@@ -155,6 +155,11 @@ class App extends React.PureComponent {
     runInAction(() => (state.delegationConfirmationRequestPending = true));
   });
 
+  onRecipientChange = action(
+    ({ target: { value } }) =>
+      (state.functionArguments = [value, ...state.functionArguments.slice(1)])
+  );
+
   render() {
     const sender = formatEthereumAddress(state.currentEthereumAccount);
     const {
@@ -164,10 +169,9 @@ class App extends React.PureComponent {
       contractDecimalsReadOnly,
       approvedDelegationRequest
     } = state;
-    const recipient = formatEthereumAddress(
+    const recipient =
       (functionArguments && functionArguments.length && functionArguments[0]) ||
-        '0x6f8103606b649522aF9687e8f1e7399eff8c4a6B'
-    );
+      '0x6f8103606b649522aF9687e8f1e7399eff8c4a6B';
     const value = formatTokenValue(
       (functionArguments && functionArguments.length && functionArguments[1]) ||
         Math.pow(10, contractDecimalsReadOnly).toString(),
@@ -215,9 +219,13 @@ class App extends React.PureComponent {
             <TransferArrow />
             <div>
               <div>
-                <input value={recipient} disabled />
+                <input
+                  value={recipient}
+                  onChange={this.onRecipientChange}
+                  disabled={state.fixed}
+                />
+                <div className="address-sub">Recipient</div>
               </div>
-              <div className="address-sub">Recipient</div>
             </div>
           </div>
           <div className="spec-table">

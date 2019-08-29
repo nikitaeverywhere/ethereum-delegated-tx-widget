@@ -25,10 +25,10 @@ Embedding
   <th>Description</th>
 </tr>
 <tr>
-  <td><code>network</code></td>
-  <td><code>mainnet</code></td>
-  <td><code>1</code></td>
-  <td>Required network name or network id (resolved automatically)</td>
+  <td><code>fixed</code></td>
+  <td><code>false</code></td>
+  <td><code>true</code></td>
+  <td>Make all inputs disabled</td>
 </tr>
 <tr>
   <td><code>contractAddress</code></td>

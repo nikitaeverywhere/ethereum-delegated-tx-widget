@@ -1,21 +1,42 @@
 input {
+  position: relative;
   border: none;
   border-radius: 6px;
   padding: 8px;
-  background-color: rgba(90, 95, 103, 0.6);
+  background-color: #464b53;
   color: var(--font-color-major);
   width: 116px;
   font-size: var(--font-size-medium);
+  line-height: 24px;
   font-family: inherit;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   text-align: center;
   outline: none;
+  transition: all .3s ease;
 }
 
 input:disabled {
-  -webkit-text-fill-color: var(--font-color-major);
+  color: var(--font-color-minor);
+  -webkit-text-fill-color: var(--font-color-minor);
   opacity: 1;
 }
+
+input:focus {
+  width: 360px;
+  font-size: var(--font-size-small);
+}
+
+.address-sub {
+  position: relative;
+  text-align: center;
+  font-size: var(--font-size-tiny);
+  color: var(--font-color-minor);
+  padding-bottom: 6px;
+}
+
+/* input:focus + .address-sub, input:focus {
+  left: -25%;
+} */
 
 button {
   border: none;
@@ -68,7 +89,7 @@ a {
 .warning-message {
   margin-bottom: 20px;
   color: #ff7a7a;
-  font-size: var(--font-size-small);
+  font-size: var(--font-size-tiny);
   text-align: center;
 }
 
@@ -90,7 +111,7 @@ a {
 
 .head-subtitle {
   text-align: center;
-  font-size: var(--font-size-small);
+  font-size: var(--font-size-tiny);
   color: var(--font-color-minor);
 }
 
@@ -104,14 +125,9 @@ a {
 
 .sender-and-recipient-block {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   justify-content: center;
-}
-
-.address-sub {
-  text-align: center;
-  font-size: var(--font-size-small);
-  color: var(--font-color-minor);
 }
 
 .strong {
@@ -121,7 +137,7 @@ a {
 
 .spec-table {
   margin: 25px 0;
-  font-size: var(--font-size-small);
+  font-size: var(--font-size-tiny);
   color: var(--font-color-minor);
   text-align: center;
 }

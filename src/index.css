@@ -12,7 +12,8 @@ html, body, #root {
 }
 
 #root {
-  --font-size-small: 14px;
+  --font-size-tiny: 14px;
+  --font-size-small: 16px;
   --font-size-medium: 19px;
   --font-size-big: 28px;
   --font-color-minor: lightgray;

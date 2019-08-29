@@ -16,6 +16,8 @@ export const updateUrl = action(state => {
       state.contractAddress
     }&functionName=${
       state.functionName
-    }&functionArguments=${state.functionArguments.join(',')}`
+    }&functionArguments=${state.functionArguments.join(',')}${
+      state.fixed ? '&fixed' : ''
+    }`
   );
 });

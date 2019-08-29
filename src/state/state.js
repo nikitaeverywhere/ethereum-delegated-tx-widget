@@ -25,6 +25,7 @@ const state = observable({
   contractDecimalsReadOnly: 6, // Updates automatically once `contractAddress` changes
   functionName: 'transfer',
   functionArguments: ['0xB3311c91d7c1B305DA3567C2320B716B13F24F8A', '9990000'],
+  fixed: false, // Whether inputs are editable or not
 
   backEndsMeta: [], // Metadata of all back ends collected from root endpoint. See ./init
   backEndsByContractReadOnly: {}, // Map contract => [back end 1, back end 2, ...]. Computed within backEndsMeta

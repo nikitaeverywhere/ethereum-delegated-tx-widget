@@ -49,6 +49,9 @@ action(() => {
   if (url.functionArguments) {
     state.functionArguments = url.functionArguments.split(',');
   }
+  if (typeof url.fixed !== 'undefined') {
+    state.fixed = true;
+  }
   updateUrl(state);
 })();
 
