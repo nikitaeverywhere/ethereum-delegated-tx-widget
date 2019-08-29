@@ -35,10 +35,29 @@ observe(
     let signOption;
     let signature = '';
     let signatureStandard = '';
-    runInAction(() => (state.globalInfoMessage = INFO_PLEASE_SIGN));
     while ((signOption = signOptionsByPriority.pop())) {
       const { standard, dataToSign } = signOption;
-      signature = await signData(state, standard, dataToSign);
+      try {
+        signature = await new Promise((res, rej) => {
+          runInAction(
+            () =>
+              (state.globalInfoMessage = INFO_PLEASE_SIGN(
+                signOptionsByPriority.length
+                  ? () => rej(new Error('Skipped by user'))
+                  : null
+              ))
+          );
+          try {
+            signData(state, standard, dataToSign)
+              .then(res)
+              .catch(rej);
+          } catch (e) {
+            rej(e);
+          }
+        });
+      } catch (e) {
+        // Do nothing - it should switch to the next available signature standard
+      }
       signatureStandard = standard;
       if (signature) {
         break;

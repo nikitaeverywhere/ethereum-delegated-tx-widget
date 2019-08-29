@@ -85,6 +85,7 @@ action(async () => {
   const interval = setInterval(addBackEnds, 250);
   await Promise.all(
     DELEGATED_TX_BACK_ENDS.map(async url => {
+      url = await url; // Resolve promises
       try {
         const meta = await httpGet(url);
         backEndsReady.push([meta, url]);

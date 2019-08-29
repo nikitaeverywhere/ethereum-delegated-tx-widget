@@ -113,10 +113,20 @@ export const WARNING_TRANSACTION_FAILED = requestId => (
   </span>
 );
 
-export const INFO_PLEASE_SIGN = (
+export const INFO_PLEASE_SIGN = nextStandard => (
   <span>
     Please, confirm the signature in your wallet. If nothing happens, try
     re-opening your wallet.
+    {nextStandard ? (
+      <span>
+        {' '}
+        You can also try using the{' '}
+        <a href="#" onClick={nextStandard}>
+          <b>next signature standard</b>
+        </a>
+        .
+      </span>
+    ) : null}
   </span>
 );
 

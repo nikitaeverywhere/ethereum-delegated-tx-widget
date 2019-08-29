@@ -12,6 +12,11 @@ input {
   outline: none;
 }
 
+input:disabled {
+  -webkit-text-fill-color: var(--font-color-major);
+  opacity: 1;
+}
+
 button {
   border: none;
   border-radius: 6px;
