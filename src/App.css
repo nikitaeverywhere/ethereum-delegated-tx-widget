@@ -13,6 +13,7 @@ input {
   text-align: center;
   outline: none;
   transition: all .3s ease;
+  white-space: pre;
 }
 
 input:disabled {
@@ -23,7 +24,7 @@ input:disabled {
 
 input:focus {
   width: 360px;
-  font-size: var(--font-size-small);
+  font-size: var(--font-size-tiny);
 }
 
 .address-sub {
