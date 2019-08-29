@@ -182,12 +182,16 @@ class App extends React.PureComponent {
       !warning &&
       (!state.approvedDelegationRequest ||
         state.delegationConfirmationRequestPending);
+    const tzOffset = new Date().getTimezoneOffset() * 60 * 1000;
+    const nowUtc = Date.now() - tzOffset;
     const expiresIn = !state.approvedDelegationRequest
       ? ''
       : new Date(
-          new Date(state.approvedDelegationRequest.expiresAt).getTime() -
-            Date.now() +
-            new Date().getTimezoneOffset() * 60 * 1000
+          Math.max(
+            tzOffset,
+            new Date(state.approvedDelegationRequest.expiresAt).getTime() -
+              nowUtc
+          )
         )
           .toTimeString()
           .replace(/\s.*$/, '')
