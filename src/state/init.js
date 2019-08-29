@@ -7,7 +7,7 @@ import {
   UNKNOWN_NETWORK,
   WARNING_WRONG_URL_PARAMETER
 } from '../const';
-import { httpGet, isValidEthereumAddress } from '../utils';
+import { httpGet, isValidEthereumAddress, updateUrl } from '../utils';
 
 const url = parse(window.location.search.slice(1));
 
@@ -49,6 +49,7 @@ action(() => {
   if (url.functionArguments) {
     state.functionArguments = url.functionArguments.split(',');
   }
+  updateUrl(state);
 })();
 
 /// Fetch back ends metadata

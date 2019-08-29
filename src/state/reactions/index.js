@@ -3,3 +3,4 @@ export * from './back-end-response';
 export * from './update-token-meta';
 export * from './back-end-polling';
 export * from './misc';
+export * from './update-url';
