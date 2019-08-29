@@ -25,7 +25,8 @@ observe(
       return;
     } else if (state.approvedDelegationResponse.status === 'failed') {
       state.globalWarningMessage = WARNING_TRANSACTION_FAILED(
-        state.approvedDelegationResponse.id
+        state.approvedDelegationResponse.id,
+        state.approvedDelegationResponse.reason
       );
       return;
     } else {

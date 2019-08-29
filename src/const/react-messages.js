@@ -105,11 +105,12 @@ export const WARNING_CONFIRMATION_BACK_END_ERROR = (url, message) => (
   </span>
 );
 
-export const WARNING_TRANSACTION_FAILED = requestId => (
+export const WARNING_TRANSACTION_FAILED = (requestId, reason = '') => (
   <span>
-    Unfortunately, delegated transaction {requestId} has failed. This could
-    happen due to request expiration, network conditions or due to failing
-    delegated back end. However, you can retry.
+    Unfortunately, delegated transaction {requestId} has failed.{' '}
+    {reason
+      ? `${reason}`
+      : 'This could happen due to request expiration, network conditions or due to failing delegated back end. However, you can retry.'}
   </span>
 );
 
