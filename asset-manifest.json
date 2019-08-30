@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/ethereum-delegated-tx-widget/static/css/main.da6e7903.chunk.css",
-    "main.js": "/ethereum-delegated-tx-widget/static/js/main.d0ef8e11.chunk.js",
-    "main.js.map": "/ethereum-delegated-tx-widget/static/js/main.d0ef8e11.chunk.js.map",
+    "main.js": "/ethereum-delegated-tx-widget/static/js/main.337f1ef7.chunk.js",
+    "main.js.map": "/ethereum-delegated-tx-widget/static/js/main.337f1ef7.chunk.js.map",
     "runtime~main.js": "/ethereum-delegated-tx-widget/static/js/runtime~main.f882906a.js",
     "runtime~main.js.map": "/ethereum-delegated-tx-widget/static/js/runtime~main.f882906a.js.map",
     "static/js/2.233158fb.chunk.js": "/ethereum-delegated-tx-widget/static/js/2.233158fb.chunk.js",
     "static/js/2.233158fb.chunk.js.map": "/ethereum-delegated-tx-widget/static/js/2.233158fb.chunk.js.map",
     "index.html": "/ethereum-delegated-tx-widget/index.html",
-    "precache-manifest.18ee2f5f79e52ff517795fd689b76ce2.js": "/ethereum-delegated-tx-widget/precache-manifest.18ee2f5f79e52ff517795fd689b76ce2.js",
+    "precache-manifest.9c9c2216af7a85b0396b06b86e89273b.js": "/ethereum-delegated-tx-widget/precache-manifest.9c9c2216af7a85b0396b06b86e89273b.js",
     "service-worker.js": "/ethereum-delegated-tx-widget/service-worker.js",
     "static/css/main.da6e7903.chunk.css.map": "/ethereum-delegated-tx-widget/static/css/main.da6e7903.chunk.css.map"
   }
