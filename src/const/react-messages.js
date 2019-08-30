@@ -148,7 +148,9 @@ export const INFO_WAIT_FOR_TRANSACTION = (txHash, network = 'mainnet') => (
         <a
           target="_blank"
           rel="noopener noreferrer"
-          href={`https://${network}.etherscan.io/tx/${txHash}`}
+          href={`https://${
+            network === 'mainnet' ? '' : network + '.'
+          }etherscan.io/tx/${txHash}`}
         >
           {formatEthereumAddress(txHash)}
         </a>{' '}
@@ -164,7 +166,9 @@ export const INFO_TRANSACTION_MINED = (txHash, network = 'mainnet') => (
     <a
       target="_blank"
       rel="noopener noreferrer"
-      href={`https://${network}.etherscan.io/tx/${txHash}`}
+      href={`https://${
+        network === 'mainnet' ? '' : network + '.'
+      }etherscan.io/tx/${txHash}`}
     >
       {formatEthereumAddress(txHash)}
     </a>
