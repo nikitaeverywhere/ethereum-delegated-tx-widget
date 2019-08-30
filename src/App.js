@@ -203,6 +203,7 @@ class App extends React.PureComponent {
 
     return (
       <div className="app">
+        <section />
         <section className="app-body">
           <h1 className="head-title">Transfer</h1>
           <div className="token-info">
@@ -275,6 +276,25 @@ class App extends React.PureComponent {
               </Button>
             </div>
           )}
+        </section>
+        <section className="app-footer">
+          Universal Delegated Transactions Back End
+          <br />
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://github.com/ZitRos/ethereum-delegated-tx-widget"
+          >
+            Source Code
+          </a>{' '}
+          |{' '}
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://github.com/ZitRos/ethereum-delegated-tx-widget/LICENSE"
+          >
+            License
+          </a>
         </section>
       </div>
     );

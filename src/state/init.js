@@ -2,7 +2,7 @@ import state from './state';
 import { action, runInAction } from 'mobx';
 import { parse } from 'qs';
 import {
-  DELEGATED_TX_BACK_ENDS,
+  DEFAULT_DELEGATED_TX_BACK_ENDS,
   NETWORK_BY_CHAIN_ID,
   UNKNOWN_NETWORK,
   WARNING_WRONG_URL_PARAMETER
@@ -52,12 +52,16 @@ action(() => {
   if (typeof url.fixed !== 'undefined') {
     state.fixed = true;
   }
+  if (url.customBackEnds) {
+    state.customBackEndsList = url.customBackEnds.split(',');
+  }
   updateUrl(state);
 })();
 
-/// Fetch back ends metadata
-// Because querying back ends can take up to 30 seconds, this function throttles the responses
-// and adds them to the state once they are ready.
+/// Async actions:
+/// - Fetch back ends metadata
+/// Because querying back ends can take up to 30 seconds, this function throttles the responses
+/// and adds them to the state once they are ready.
 action(async () => {
   const backEndsReady = [];
   const addBackEnds = () => {
@@ -87,8 +91,11 @@ action(async () => {
     });
   };
   const interval = setInterval(addBackEnds, 250);
+  const backEnds = DEFAULT_DELEGATED_TX_BACK_ENDS.concat(
+    state.customBackEndsList
+  ).filter((be, i, arr) => arr.indexOf(be) === i); // Deletes duplicates
   await Promise.all(
-    DELEGATED_TX_BACK_ENDS.map(async url => {
+    backEnds.map(async url => {
       url = await url; // Resolve promises
       try {
         const meta = await httpGet(url);

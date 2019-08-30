@@ -18,6 +18,10 @@ export const updateUrl = action(state => {
       state.functionName
     }&functionArguments=${state.functionArguments.join(',')}${
       state.fixed ? '&fixed' : ''
+    }${
+      state.customBackEndsList.length
+        ? `&customBackEnds=${state.customBackEndsList.join(',')}`
+        : ''
     }`
   );
 });

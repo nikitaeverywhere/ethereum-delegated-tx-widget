@@ -24,9 +24,10 @@ const state = observable({
   contractSymbolReadOnly: 'DREAM', // Updates automatically once `contractAddress` changes
   contractDecimalsReadOnly: 6, // Updates automatically once `contractAddress` changes
   functionName: 'transfer',
-  functionArguments: ['0xB3311c91d7c1B305DA3567C2320B716B13F24F8A', '9990000'],
+  functionArguments: ['0x17A813dF7322F8AAC5cAc75eB62c0d13B8aea29D', '9990000'],
   fixed: false, // Whether inputs are editable or not
 
+  customBackEndsList: [], // Passed as URL parameter
   backEndsMeta: [], // Metadata of all back ends collected from root endpoint. See ./init
   backEndsByContractReadOnly: {}, // Map contract => [back end 1, back end 2, ...]. Computed within backEndsMeta
 

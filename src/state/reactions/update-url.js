@@ -6,7 +6,8 @@ const observeProps = [
   'contractAddress',
   'functionName',
   'functionArguments',
-  'fixed'
+  'fixed',
+  'customBackEndsList'
 ];
 
 observeProps.forEach(prop => observe(state, prop, () => updateUrl(state)));
