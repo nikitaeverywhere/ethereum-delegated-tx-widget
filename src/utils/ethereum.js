@@ -18,7 +18,7 @@ export function formatTokenValue(value, decimals = 18) {
   }
   value = value.padStart(decimals + 1, '0');
   return (
-    value.substring(0, value.length - decimals) +
+    (value.substring(0, value.length - decimals).replace(/^0+/, '') || '0') +
     '.' +
     value.substr(-decimals, 2)
   );
@@ -27,7 +27,7 @@ export function formatTokenValue(value, decimals = 18) {
 export function parseTokenValueFromInput(inputValue, decimals = 18) {
   const parts = inputValue.split('.');
   const num = parts[0] + parts[1].padEnd(2, '0');
-  return num.padEnd(num.length + decimals - 2, '0');
+  return num.padEnd(num.length + decimals - 2, '0').replace(/^0+/, '') || '0';
 }
 
 export function isValidEthereumAddress(address) {
