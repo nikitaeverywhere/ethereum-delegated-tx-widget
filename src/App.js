@@ -11,7 +11,8 @@ import Button from './components/Button';
 import {
   formatEthereumAddress,
   formatTokenValue,
-  getBackEndContracts
+  getBackEndContracts,
+  parseTokenValueFromInput
 } from './utils';
 import {
   NETWORK_BY_CHAIN_ID,
@@ -160,6 +161,15 @@ class App extends React.PureComponent {
       (state.functionArguments = [value, ...state.functionArguments.slice(1)])
   );
 
+  onValueChange = action(
+    ({ target: { value } }) =>
+      (state.functionArguments = [
+        state.functionArguments[0],
+        parseTokenValueFromInput(value, state.contractDecimalsReadOnly),
+        ...state.functionArguments.slice(2)
+      ])
+  );
+
   render() {
     const sender = formatEthereumAddress(state.currentEthereumAccount);
     const {
@@ -207,7 +217,17 @@ class App extends React.PureComponent {
         <section className="app-body">
           <h1 className="head-title">Transfer</h1>
           <div className="token-info">
-            {value} <TokenLogo tokenAddress={contractAddress} />{' '}
+            {state.fixed ? (
+              value
+            ) : (
+              <input
+                value={value}
+                onChange={this.onValueChange}
+                className="bold"
+                style={{ width: `${17 * (value.length - 1) + 5}px` }}
+              />
+            )}{' '}
+            <TokenLogo tokenAddress={contractAddress} />{' '}
             {contractSymbolReadOnly}
           </div>
           <div className="sender-and-recipient-block">
@@ -224,6 +244,7 @@ class App extends React.PureComponent {
                   value={recipient}
                   onChange={this.onRecipientChange}
                   disabled={state.fixed}
+                  className="expandable"
                 />
                 <div className="address-sub">Recipient</div>
               </div>
@@ -278,7 +299,7 @@ class App extends React.PureComponent {
           )}
         </section>
         <section className="app-footer">
-          Universal Delegated Transactions Back End
+          Universal Delegated Transactions for Ethereum
           <br />
           <a
             target="_blank"

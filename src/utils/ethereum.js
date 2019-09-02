@@ -24,6 +24,12 @@ export function formatTokenValue(value, decimals = 18) {
   );
 }
 
+export function parseTokenValueFromInput(inputValue, decimals = 18) {
+  const parts = inputValue.split('.');
+  const num = parts[0] + parts[1].padEnd(2, '0');
+  return num.padEnd(num.length + decimals - 2, '0');
+}
+
 export function isValidEthereumAddress(address) {
   return typeof address === 'string' && /0x[0-9a-f]{40}/i.test(address);
 }

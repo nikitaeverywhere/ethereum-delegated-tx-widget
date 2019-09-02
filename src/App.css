@@ -14,6 +14,14 @@ input {
   outline: none;
   transition: all .3s ease;
   white-space: pre;
+  box-sizing: content-box;
+}
+
+input.bold {
+  font-size: var(--font-size-big);
+  font-weight: bold;
+  padding-top: 1px;
+  padding-bottom: 2px;
 }
 
 input:disabled {
@@ -22,8 +30,8 @@ input:disabled {
   opacity: 1;
 }
 
-input:focus {
-  width: 360px;
+input.expandable:focus {
+  width: 340px;
   font-size: var(--font-size-tiny);
 }
 

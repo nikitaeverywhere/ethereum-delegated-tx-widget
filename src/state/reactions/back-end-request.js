@@ -1,12 +1,10 @@
 import { observe, action, runInAction, toJS } from 'mobx';
-import {
-  WARNING_BACK_END_ERROR,
-  WARNING_BACK_END_INVALID_RESPONSE
-} from '../../const';
+import { WARNING_BACK_END_ERROR } from '../../const';
 import { getBackEndContracts, httpPost } from '../../utils';
 import state from '../state';
 
 let backEndRequested = false;
+let lastBackEndRequestId = 0;
 
 const requestBackEnd = action(async () => {
   // Ignore if request is already made or there are any warning messages
@@ -15,6 +13,7 @@ const requestBackEnd = action(async () => {
   }
 
   backEndRequested = true;
+  const backEndRequestId = ++lastBackEndRequestId;
 
   // Request back end
   let backEndErrors = [];
@@ -51,18 +50,18 @@ const requestBackEnd = action(async () => {
         !(res.request.signatureOptions instanceof Array) ||
         res.request.signatureOptions.length === 0
       ) {
-        runInAction(
-          () =>
-            (state.backendWarningMessage = WARNING_BACK_END_INVALID_RESPONSE(
-              meta.url,
-              JSON.stringify(res)
-            ))
+        console.warn(
+          `Weird back end ${meta.url} response, ${JSON.stringify(res)}`
         );
         return null;
       }
       return [res.request, meta];
     })
   )).filter(r => !!r);
+
+  if (lastBackEndRequestId !== backEndRequestId) {
+    return; // Prevent concurrent requests
+  }
 
   if (
     (backEndErrors.length > 0 && !state.backendWarningMessage) ||

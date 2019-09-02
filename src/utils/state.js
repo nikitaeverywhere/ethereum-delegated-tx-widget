@@ -17,11 +17,9 @@ export const updateUrl = action(state => {
     }&functionName=${
       state.functionName
     }&functionArguments=${state.functionArguments.join(',')}${
-      state.fixed ? '&fixed' : ''
-    }${
       state.customBackEndsList.length
         ? `&customBackEnds=${state.customBackEndsList.join(',')}`
         : ''
-    }`
+    }${state.fixed ? '&fixed' : ''}`
   );
 });
