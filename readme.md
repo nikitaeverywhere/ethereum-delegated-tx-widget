@@ -8,6 +8,7 @@ Primarily, delegated transactions, or meta transactions allow users to pay fee i
 + Can work **with any token** which supports function delegation (but you have to set up a back end for it)
 + Helpful hints, which allow to quickly onboard inexperienced users
 + Signature standard-free paradigm (use any signature your contract supports, e.g. `eth_personalSign`, `eth_signTypedData`)
++ Automatically picks an icon of your token (from Trust Wallet repository)
 
 (i) Delegated transactions back end is yet to be open-sourced soon.
 
