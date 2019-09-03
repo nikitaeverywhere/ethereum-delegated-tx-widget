@@ -26,6 +26,7 @@ const state = observable({
   functionName: 'transfer',
   functionArguments: ['0x17A813dF7322F8AAC5cAc75eB62c0d13B8aea29D', '9990000'],
   fixed: false, // Whether inputs are editable or not
+  successRedirectUrl: '',
 
   customBackEndsList: [], // Passed as URL parameter
   backEndsMeta: [], // Metadata of all back ends collected from root endpoint. See ./init

@@ -20,6 +20,10 @@ export const updateUrl = action(state => {
       state.customBackEndsList.length
         ? `&customBackEnds=${state.customBackEndsList.join(',')}`
         : ''
+    }${
+      state.successRedirectUrl
+        ? `&successRedirectUrl=${state.successRedirectUrl}`
+        : ''
     }${state.fixed ? '&fixed' : ''}`
   );
 });

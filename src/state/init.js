@@ -58,6 +58,12 @@ action(() => {
   if (url.customBackEnds) {
     state.customBackEndsList = url.customBackEnds.split(',');
   }
+  if (
+    typeof url.successRedirectUrl === 'string' &&
+    url.successRedirectUrl.indexOf('java') !== 0 // Avoid 'javascript:'
+  ) {
+    state.successRedirectUrl = url.successRedirectUrl;
+  }
   updateUrl(state);
 })();
 

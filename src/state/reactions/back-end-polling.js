@@ -22,6 +22,9 @@ observe(
         state.approvedDelegationResponse.transactionHash,
         state.selectedNetworkNameReadOnly
       );
+      if (typeof state.successRedirectUrl === 'string') {
+        window.location.replace(state.successRedirectUrl);
+      }
       return;
     } else if (state.approvedDelegationResponse.status === 'failed') {
       state.globalWarningMessage = WARNING_TRANSACTION_FAILED(

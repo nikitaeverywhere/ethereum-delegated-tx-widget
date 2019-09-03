@@ -7,7 +7,8 @@ const observeProps = [
   'functionName',
   'functionArguments',
   'fixed',
-  'customBackEndsList'
+  'customBackEndsList',
+  'successRedirectUrl'
 ];
 
 observeProps.forEach(prop => observe(state, prop, () => updateUrl(state)));
