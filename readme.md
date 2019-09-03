@@ -1,10 +1,13 @@
 # Ethereum Delegated Transactions Widget
 
-Elegant Ethereum delegated transactions.
+Elegant Ethereum delegated transactions implementation.
+
+Primarily, delegated transactions, or meta transactions allow users to pay fee in tokens instead of Ether, making crypto user experience great again. This widget is shipped with the [back end](https://github.com/ZitRos/ethereum-delegated-tx-service), which can be used for any token or smart contract supporting doing-something-via-signature.
 
 + Highly customizable widget and a stand-alone page
-+ Can work **for any token** which supports function delegation
++ Can work **with any token** which supports function delegation (but you have to set up a back end for it)
 + Helpful hints, which allow to quickly onboard inexperienced users
++ Signature standard-free paradigm (use any signature your contract supports, e.g. `eth_personalSign`, `eth_signTypedData`)
 
 (i) Delegated transactions back end is yet to be open-sourced soon.
 

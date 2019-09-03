@@ -22,7 +22,10 @@ observe(
         state.approvedDelegationResponse.transactionHash,
         state.selectedNetworkNameReadOnly
       );
-      if (typeof state.successRedirectUrl === 'string') {
+      if (
+        state.successRedirectUrl &&
+        typeof state.successRedirectUrl === 'string'
+      ) {
         window.location.replace(state.successRedirectUrl);
       }
       return;
