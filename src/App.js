@@ -130,7 +130,7 @@ class App extends React.PureComponent {
         state.ethersProvider = provider;
       });
       await this.updateFromProvider();
-      console.log('Provider', provider);
+      // console.log('Provider', provider);
     } catch (e) {
       runInAction(
         () =>
@@ -175,6 +175,7 @@ class App extends React.PureComponent {
     const {
       contractAddress,
       contractSymbolReadOnly,
+      functionName,
       functionArguments,
       contractDecimalsReadOnly,
       approvedDelegationRequest
@@ -215,7 +216,13 @@ class App extends React.PureComponent {
       <div className="app">
         <section />
         <section className="app-body">
-          <h1 className="head-title">Transfer</h1>
+          <h1 className="head-title">
+            {functionName === 'transfer'
+              ? 'Transfer'
+              : functionName === 'approveAndCall'
+              ? 'Approve and Call'
+              : functionName}
+          </h1>
           <div className="token-info">
             {state.fixed ? (
               value
@@ -246,7 +253,9 @@ class App extends React.PureComponent {
                   disabled={state.fixed}
                   className="expandable"
                 />
-                <div className="address-sub">Recipient</div>
+                <div className="address-sub">
+                  {functionName === 'approveAndCall' ? 'Contract' : 'Recipient'}
+                </div>
               </div>
             </div>
           </div>

@@ -105,4 +105,5 @@ const clearAndRequest = action(() => {
 
 observe(state, 'warningMessageReadOnly', requestBackEnd);
 observe(state, 'contractAddress', clearAndRequest);
+observe(state, 'currentEthereumAccount', clearAndRequest);
 observe(state, 'functionArguments', clearAndRequest);

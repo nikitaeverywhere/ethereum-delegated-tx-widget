@@ -105,7 +105,6 @@ observe(
     }
 
     // Process response
-    console.log('Success!', response);
     runInAction(() => {
       if (!response || !response.result) {
         state.globalWarningMessage = WARNING_BACK_END_ERROR(

@@ -46,6 +46,9 @@ action(() => {
       );
     }
   }
+  if (url.functionName) {
+    state.functionName = url.functionName;
+  }
   if (url.functionArguments) {
     state.functionArguments = url.functionArguments.split(',');
   }
