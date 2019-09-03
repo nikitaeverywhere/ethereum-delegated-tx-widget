@@ -34,7 +34,7 @@ const requestBackEnd = action(async () => {
       try {
         res = await httpPost(`${meta.url}/request`, {
           contractAddress: state.contractAddress,
-          signer: state.currentEthereumAccount,
+          from: state.currentEthereumAccount,
           functionName: state.functionName,
           functionArguments: state.functionArguments
         });
