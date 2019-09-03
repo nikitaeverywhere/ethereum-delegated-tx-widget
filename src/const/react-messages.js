@@ -84,7 +84,13 @@ export const WARNING_SUPPORTED_CONTRACT_WRONG_NETWORK = (
 
 export const WARNING_BACK_END_ERROR = (url, res) => (
   <span>
-    Delegated back end {url} error: {res}
+    Delegated back end error ({url}): {res}
+    <br />
+    <strong>
+      <u>
+        Check your token balance or switch to another account in your wallet
+      </u>
+    </strong>
   </span>
 );
 
@@ -100,7 +106,9 @@ export const WARNING_CONFIRMATION_BACK_END_ERROR = (url, message) => (
     this error: {message}
     <br />
     <strong>
-      <u>Check your token balance and reload this page once refilled.</u>
+      <u>
+        Check your token balance or switch to another account in your wallet
+      </u>
     </strong>
   </span>
 );
