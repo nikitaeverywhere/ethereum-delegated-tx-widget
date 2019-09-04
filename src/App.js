@@ -188,9 +188,15 @@ class App extends React.PureComponent {
         Math.pow(10, contractDecimalsReadOnly).toString(),
       contractDecimalsReadOnly
     );
+    const feeData =
+      (approvedDelegationRequest &&
+        approvedDelegationRequest.fees &&
+        approvedDelegationRequest.fees.length &&
+        approvedDelegationRequest.fees[0]) ||
+      {};
     const fee = formatTokenValue(
-      (approvedDelegationRequest && approvedDelegationRequest.fee) || 0,
-      contractDecimalsReadOnly
+      feeData.value || '0',
+      feeData.decimals || contractDecimalsReadOnly
     );
     let warning = state.warningMessageReadOnly;
     const isLoading =
