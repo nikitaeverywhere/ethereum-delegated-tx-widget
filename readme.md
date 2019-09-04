@@ -10,8 +10,6 @@ Primarily, delegated transactions, or meta transactions allow users to pay fee i
 + Signature standard-free paradigm (use any signature your contract supports, e.g. `eth_personalSign`, `eth_signTypedData`)
 + Automatically picks an icon of your token (from Trust Wallet repository)
 
-(i) Delegated transactions back end is yet to be open-sourced soon.
-
 <p align="center">
   <br/><b><a href="https://zitros.github.io/ethereum-delegated-tx-widget/" target="_blank">→ CHECK THE DEMO HERE! ←</a></b><br/><br/>
   <img src="https://user-images.githubusercontent.com/4989256/64173367-cbec8080-ce5f-11e9-87c3-c1c77ae83dc4.png" alt="screenshot" width="360"><br/><br/>
