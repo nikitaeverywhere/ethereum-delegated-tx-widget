@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/ethereum-delegated-tx-widget/precache-manifest.00896070daec4240fb85d69370944ad6.js"
+  "/ethereum-delegated-tx-widget/precache-manifest.8df873b00c51533f2e22ab4adfb1ab35.js"
 );
 
 self.addEventListener('message', (event) => {
