@@ -312,6 +312,14 @@ class App extends React.PureComponent {
               </Button>
             </div>
           )}
+          <div className="spec-table">
+            Please note that{' '}
+            <a target="_blank" rel="noopener noreferrer" href="https://kuna.io">
+              some exchanges
+            </a>{' '}
+            may not support this type of transactions (it&apos;s their issue).
+            Use with caution.
+          </div>
         </section>
         <section className="app-footer">
           Universal Delegated Transactions for Ethereum
@@ -322,6 +330,14 @@ class App extends React.PureComponent {
             href="https://github.com/ZitRos/ethereum-delegated-tx-widget"
           >
             Source Code
+          </a>{' '}
+          |{' '}
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://github.com/ZitRos/ethereum-delegated-tx-service#setup"
+          >
+            Plug In Your Token
           </a>{' '}
           |{' '}
           <a
