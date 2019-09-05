@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a5bd5260fe32d19ebcbd09a09d5d705c",
+    "revision": "11f5ecb59c04b2550966c7f3a05cd6db",
     "url": "/ethereum-delegated-tx-widget/index.html"
   },
   {
-    "revision": "94f101076c1f2b588f45",
+    "revision": "a37ee70bc70d194d2eaa",
     "url": "/ethereum-delegated-tx-widget/static/css/main.de5d39fd.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/ethereum-delegated-tx-widget/static/js/2.e98e0c1b.chunk.js"
   },
   {
-    "revision": "94f101076c1f2b588f45",
-    "url": "/ethereum-delegated-tx-widget/static/js/main.93ce4ae9.chunk.js"
+    "revision": "a37ee70bc70d194d2eaa",
+    "url": "/ethereum-delegated-tx-widget/static/js/main.aac6bb9b.chunk.js"
   },
   {
     "revision": "4d0a2ae097843795d9fe",
