@@ -8,6 +8,7 @@
     "url": "git+https://github.com/ZitRos/ethereum-delegated-tx-widget.git"
   },
   "homepage": "https://zitros.github.io/ethereum-delegated-tx-widget",
+  "homepage-dreamteam": "https://send-token.dreamteam.gg",
   "bugs": {
     "url": "https://github.com/ZitRos/ethereum-delegated-tx-widget/issues"
   },
@@ -40,7 +41,8 @@
     "lint": "eslint src",
     "lint-fix": "eslint src --fix",
     "predeploy": "yarn build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "deploy-dreamteam": "gh-pages -d build --repo https://github.com/dreamteam-gg/ethereum-delegated-tx-widget.git"
   },
   "eslintConfig": {
     "extends": "react-app"
