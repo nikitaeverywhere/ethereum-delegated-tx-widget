@@ -66,6 +66,7 @@ class App extends React.PureComponent {
       );
       if (!NETWORK_BY_CHAIN_ID[network]) {
         runInAction(
+          // eslint-disable-next-line no-loop-func
           () => (state.networkWarningMessage = WARNING_UNKNOWN_NETWORK(network))
         );
         await new Promise(r => setTimeout(r, 5000));

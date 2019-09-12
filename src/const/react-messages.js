@@ -130,7 +130,7 @@ export const INFO_PLEASE_SIGN = nextStandard => (
       <span>
         {' '}
         You can also try using the{' '}
-        <a href="#" onClick={nextStandard}>
+        <a href="#x" onClick={nextStandard}>
           <b>next signature standard</b>
         </a>
         .
