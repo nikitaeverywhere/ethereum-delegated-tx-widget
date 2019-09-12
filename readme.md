@@ -1,5 +1,7 @@
 # Ethereum Delegated Transactions Widget
 
+[![Actions Status](https://github.com/zitros/ethereum-delegated-tx-widget/workflows/Lint%20and%20Test/badge.svg)](https://github.com/zitros/ethereum-delegated-tx-widget/actions)
+
 Elegant Ethereum delegated transactions implementation.
 
 Primarily, delegated transactions, or meta transactions allow users to pay fee in tokens instead of Ether, making crypto user experience great again. This widget is shipped with the [back end](https://github.com/ZitRos/ethereum-delegated-tx-service), which can be used for any token or smart contract supporting doing-something-via-signature.
