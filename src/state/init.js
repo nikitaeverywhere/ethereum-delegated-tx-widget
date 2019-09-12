@@ -83,6 +83,7 @@ action(async () => {
             `Back end endpoint GET ${url} does not provide contracts[]`
           );
         }
+        // eslint-disable-next-line no-unused-vars
         for (const contractBackEnd of backEnd.contracts || []) {
           state.backEndsByContractReadOnly = {
             ...state.backEndsByContractReadOnly,
