@@ -101,8 +101,10 @@ action(async () => {
     });
   };
   const interval = setInterval(addBackEnds, 250);
-  const backEnds = DEFAULT_DELEGATED_TX_BACK_ENDS.concat(
-    state.customBackEndsList
+  const backEnds = (state.customBackEndsList &&
+  state.customBackEndsList.length > 0
+    ? state.customBackEndsList
+    : DEFAULT_DELEGATED_TX_BACK_ENDS
   ).filter((be, i, arr) => arr.indexOf(be) === i); // Deletes duplicates
   await Promise.all(
     backEnds.map(async url => {

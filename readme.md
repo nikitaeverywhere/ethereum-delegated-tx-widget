@@ -66,7 +66,7 @@ Embedding
   <td><code>customBackEnds</code></td>
   <td></td>
   <td><code>my-website.com/api/kovan,my-website.com/api/mainnet</code></td>
-  <td>Public custom delegated transactions back end (see <a target="_blank" href="https://github.com/ZitRos/ethereum-delegated-tx-service">ethereum-delegated-tx-service</a>). Otherwise, pre-defined back end is used.</td>
+  <td>Custom delegated transactions back end APIs list (see <a target="_blank" href="https://github.com/ZitRos/ethereum-delegated-tx-service">ethereum-delegated-tx-service</a>). Otherwise, pre-defined back ends are used.</td>
 </tr>
 <tr>
   <td><code>successRedirectUrl</code></td>
