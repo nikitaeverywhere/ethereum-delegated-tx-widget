@@ -1,6 +1,7 @@
 import React from 'react';
 import { action, runInAction } from 'mobx';
 import { observer } from 'mobx-react';
+import AutosizeInput from 'react-input-autosize';
 import './App.css';
 import { state } from './state';
 import TransferArrow from './components/TransferArrow';
@@ -234,11 +235,10 @@ class App extends React.PureComponent {
             {state.fixed ? (
               value
             ) : (
-              <input
+              <AutosizeInput
                 value={value}
                 onChange={this.onValueChange}
-                className="bold"
-                style={{ width: `${17 * (value.length - 1) + 5}px` }}
+                class="bold"
               />
             )}{' '}
             <TokenLogo tokenAddress={contractAddress} />{' '}

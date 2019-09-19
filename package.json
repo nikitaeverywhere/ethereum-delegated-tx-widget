@@ -31,6 +31,7 @@
     "qs": "^6.8.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
+    "react-input-autosize": "^2.2.1",
     "react-scripts": "3.1.1"
   },
   "scripts": {
@@ -41,8 +42,8 @@
     "lint": "eslint src",
     "lint-fix": "eslint src --fix",
     "predeploy": "yarn build",
-    "deploy": "gh-pages -d build",
-    "deploy-dreamteam": "gh-pages -d build --repo https://github.com/dreamteam-gg/ethereum-delegated-tx-widget.git"
+    "deploy": "npm run build && gh-pages -d build",
+    "deploy-dreamteam": "echo 'Make sure to replace homepage with homepage-dreamteam manually in package.json' && npm run build && printf \"send-token.dreamteam.gg\" > build/CNAME && gh-pages -d build --repo https://github.com/dreamteam-gg/ethereum-delegated-tx-widget.git"
   },
   "eslintConfig": {
     "extends": "react-app"
