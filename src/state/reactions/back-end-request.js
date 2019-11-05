@@ -64,8 +64,9 @@ const requestBackEnd = action(async () => {
   }
 
   if (
-    (backEndErrors.length > 0 && !state.backendWarningMessage) ||
-    responses.length === 0
+    backEndErrors.length > 0
+    && !state.backendWarningMessage
+    && responses.length === 0
   ) {
     runInAction(() => {
       const [url, e] =
