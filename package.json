@@ -7,8 +7,8 @@
     "type": "git",
     "url": "git+https://github.com/ZitRos/ethereum-delegated-tx-widget.git"
   },
-  "homepage": "https://zitros.github.io/ethereum-delegated-tx-widget",
-  "homepage-dreamteam": "https://send-token.dreamteam.gg",
+  "homepage-dreamteam": "https://zitros.github.io/ethereum-delegated-tx-widget",
+  "homepage": "https://send-token.dreamteam.gg",
   "bugs": {
     "url": "https://github.com/ZitRos/ethereum-delegated-tx-widget/issues"
   },
